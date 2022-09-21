@@ -1,13 +1,13 @@
 import socket
 
-s = socket.socket()
+s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 print("<+> Socket created successfully")
 
 port = 2728
 
 # bind to the port into the socket
 # keep the empty string because accept to any request
-s.bind(('', port))
+s.bind(('127.0.0.1', port))
 print("<+> socket binded to %s" % (port))
 
 # socket -> listening mode
@@ -38,7 +38,7 @@ while True:
     # something more...
     # so we should respond to it by each route
 
-    convReq = req.strip().split(' ')
+    convReq = req.split(' ')
     # Here I splitted the server request into parts from spaces and put that array into 'convReq' variable
     # the convReq[0] is the Request method (GET | POST)
     # the convReq[1] is the url routing path ex:-(/, /users, /login)
@@ -53,9 +53,11 @@ while True:
     elif (convReq[1] == '/profile'):  # this is a route '/users'
         file = open("htdocs/users.html", "r")
         conn.send(bytes('HTTP/1.x 200 OK', 'utf8'))
-
+    elif (convReq[1] == '/about'):
+        file = open("htdocs/aboutMe/about.html", "r")
+        conn.send(bytes('HTTP/1.x 200 OK', 'utf8'))
     else:
-        file = open("htdocs/404.html", "r")  # this is page not found page
+        file = open("htdocs/status/404.html", "r")  # this is page not found page
         # page not found because a wrong url route.
         conn.send(bytes('HTTP/1.x 404 Not Found', 'utf8'))
         # sends a (404 status) response
