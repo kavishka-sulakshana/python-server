@@ -1,17 +1,17 @@
 import socket
 
 s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-# AF_INET       --> ipv4
-# SOCK_STREAM   --> tcp/ip protocol 
+# AF_INET       --> use ipv4 
+# SOCK_STREAM   --> use tcp 
 print("<+> Socket created successfully")
 
 port = 2728 # This is the port that bind to the socket
 
-# bind to the port into the socket  |   127.0.0.1 because accept to any request
+# bind 127.0.0.1 ip and 2728 port into the socket
 s.bind(('127.0.0.1', port))
 
 print("<+> socket binded to %s" % (port))  
-s.listen(5)  # socket -> listening mode
+s.listen(5)  # put the server to listening requests 
 print("<+> socket is listening")
 print(">----------------------------<")
 
@@ -41,15 +41,16 @@ while True:
     convReq = req.split(' ')
     # Here I splitted the server request into parts from spaces and put that array into 'convReq' variable
     # the convReq[0] is the Request method (GET | POST)
-    # the convReq[1] is the url routing path ex:-(/, /users, /login)
+    # the convReq[1] is the url routing path ex:-(/, /about.html, /login.html)
 
-    filePath = convReq[1] # get the route as file path
+    filePath = convReq[1] # get the url route as file path
     file = ''  # declaring variable for read pages
 
     if (convReq[1] == '/'):   # this is the default route '/' | default route responding with the index.html file
         filePath = '/index.html'
     
-    # use try-exept because we should catch the errors
+    # use try-exept because we should catch the errors if there is no html file 
+    #       exists in the server that client requesting 
     try :
         file = open('htdocs'+filePath,'r') 
         conn.send(bytes('HTTP/1.x 200 OK', 'utf8')) # This is the success respond status 
@@ -60,7 +61,7 @@ while True:
         file.close()
     except :
         conn.send(bytes('HTTP/1.x 404 Not Found', 'utf8'))
-        # If the file is not available sent the 404 not found response
+        # If the file is not available in the server send a 404 not found ststus
         conn.send(bytes(' Content-Type : text/html\r\n', 'utf8')) # The response content type is text/html
         conn.send((bytes('\r\n', 'utf8')))
         conn.send(bytes("<center><p>Oops! Page not found <br> 404 error</p></center>", 'utf8')) 

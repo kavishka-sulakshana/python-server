@@ -2,7 +2,7 @@
 #### SCS2205 - Computer Networks I
 # Web Server
 
->This is a simple web server written in python language with socket programming in python.
+> This is a simple web server written in python language with socket programming in python.
 
 To run and work with this server,
 
